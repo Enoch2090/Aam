@@ -4,11 +4,11 @@
 import os
 import re
 import json
-import urllib2
+import urllib.request
 import datetime
-import ConfigParser
+import configparser
 
-from StringIO import StringIO
+from io import StringIO
 
 from aam.utils import md_to_html
 from aam.options import hub
@@ -19,15 +19,15 @@ def read_config():
         print("Can't find any config file.")
         exit(1)
 
-    parser = ConfigParser.SafeConfigParser()
+    parser = configparser.ConfigParser()
     parser.read(config_path)
 
-    hub.site.name = parser.get("main_settings", "site_name").decode('utf-8')
-    hub.site.owner = parser.get("main_settings", "site_owner").decode('utf-8')
-    hub.site.url = parser.get("main_settings", "site_url").decode('utf-8')
-    hub.site.github_name = parser.get("main_settings", "github_name").decode('utf-8')
-    hub.site.douban_name = parser.get("main_settings", "douban_name").decode('utf-8')
-    hub.site.analytics = parser.get("main_settings", "analytics").decode('utf-8')
+    hub.site.name = parser.get("main_settings", "site_name")
+    hub.site.owner = parser.get("main_settings", "site_owner")
+    hub.site.url = parser.get("main_settings", "site_url")
+    hub.site.github_name = parser.get("main_settings", "github_name")
+    hub.site.douban_name = parser.get("main_settings", "douban_name")
+    hub.site.analytics = parser.get("main_settings", "analytics")
 
     hub.site.repo_switch = parser.getboolean("function_switch", "show_github_repo")
     hub.site.book_switch = parser.getboolean("function_switch", "show_douban_book")
@@ -64,7 +64,7 @@ def read_page():
 
 def get_github_repo():
     repo_list = []
-    all_repos = json.JSONDecoder().decode(urllib2.urlopen('https://api.github.com/users/%s/repos' % hub.site.github_name).read())
+    all_repos = json.JSONDecoder().decode(urllib.request.urlopen('https://api.github.com/users/%s/repos' % hub.site.github_name).read().decode('utf-8'))
     for repo in all_repos:
         repo_content = {"name": "","star": "","url": "","description": ""}
         repo_content["name"] = repo["name"]

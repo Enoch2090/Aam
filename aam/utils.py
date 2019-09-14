@@ -4,10 +4,10 @@
 import os
 import mistune
 
-from reader.markdown import MyRenderer
+from aam.reader.markdown import MyRenderer
 
 def to_unicode(value):
-    if isinstance(value, unicode):
+    if isinstance(value, str):
         return value
     if isinstance(value, basestring):
         return value.decode('utf-8')
@@ -24,6 +24,7 @@ def mkdir(path):
 def md_to_html(text):
     text = to_unicode(text)
     renderer = MyRenderer()
+    #renderer = mistune.Renderer(escape=True, hard_wrap=True)
     md = mistune.Markdown(renderer=renderer)
     return md.render(text)
 
